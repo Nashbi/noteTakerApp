@@ -1,8 +1,6 @@
 const fs = require('fs')
 const express = require('express')
-// const util = require('util')
 const path = require('path')
-// const notes = require('./db/db.json')
 const { v4: uuidv4 } = require('uuid')
 const app = express()
 
@@ -22,6 +20,8 @@ app.get('/notes', (req, res) =>
     res.sendFile(path.join(__dirname, '/public/notes.html'))
 );
 
+//Let's stringify our JSON file's content
+
 const writeToFile = (destination, content) =>
   fs.writeFile(destination, JSON.stringify(content, null, 4), (err) =>
     err ? console.error(err) : console.info(`\nData written to ${destination}`)
@@ -39,20 +39,19 @@ const writeToFile = (destination, content) =>
     });
   };
 
-
+// Reading and Parsing our JSON
 app.get('/api/notes', (req, res) => {
     let ourNotes = fs.readFileSync('./db/db.json')
     ourNotes = JSON.parse(ourNotes);
     res.json(ourNotes);
 });
-
+// Allows us to route and create new notes
 app.post('/api/notes', (req, res) => {
     const {title, text} = req.body;
     if (req.body) {
         const noteBody = {
             title,
             text,
-            // id: uuid(),
         };
     readAndAppend(noteBody, './db/db.json');
     res.json('success')
@@ -63,15 +62,14 @@ app.post('/api/notes', (req, res) => {
 
 });
 
+// we'll be running on localHost:3001
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => console.log(`Server has started on port ${PORT}`))
 
 
 
-
-
-
+//Notes for Nashbi 
 // use the fs.length; fs. - use textContent to display ; 
 //after you read the files, console log that data, 
 //if it looks like an array of objects then you can use vanilla.js syntax to get what you need done.
